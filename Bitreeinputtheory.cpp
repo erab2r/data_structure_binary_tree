@@ -23,7 +23,7 @@ Node* input_tree()
     if(val == -1)  root = NULL;
     else root = new Node(val);
     queue<Node*> q;
-    if(root) q.push(root);
+    if(root!= NULL) q.push(root);  
     while(!q.empty())
     {
         // 1. ber kore ana
