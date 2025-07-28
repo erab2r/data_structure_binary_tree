@@ -28,7 +28,9 @@ void levelOrder(Node* root){
             q.push(f->right);
         }
     }
+    
 }
+
 
 int main(){
     Node* root = new Node(10);
