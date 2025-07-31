@@ -1,111 +1,104 @@
-#include<bits/stdc++.h>
+#include <bits/stdc++.h>
 using namespace std;
 
-class Node
-{
-    public:
-        int val;
-        Node* left;
-        Node* right;
-    Node(int val)
-    {
+class Node {
+public:
+    int val;
+    Node* left;
+    Node* right;
+    Node(int val) {
         this->val = val;
         this->left = NULL;
         this->right = NULL;
     }
 };
 
-Node* input_tree()
-{
-   int val;
-   cin >> val;
-   Node* root;
-   if(val == -1) root = NULL;
-   else root = new Node(val);
+Node* input_tree() {
+    int val;
+    cin >> val;
+    Node* root;
+    if (val == -1)
+        root = NULL;
+    else
+        root = new Node(val);
     queue<Node*> q;
-    if(root) q.push(root);
-    while (!q.empty())
-    {
+    if (root)
+        q.push(root);
+    while (!q.empty()) {
         Node* p = q.front();
         q.pop();
-        int l,r;
+        int l, r;
         cin >> l >> r;
-        Node* myLeft, *myRight;
-        if(l == -1) myLeft = NULL;
-        else myLeft = new Node(l);
-        if(r == -1) myRight = NULL;
-        else myRight = new Node(r);
+
+        Node* myLeft = (l == -1) ? NULL : new Node(l);
+        Node* myRight = (r == -1) ? NULL : new Node(r);
+
         p->left = myLeft;
         p->right = myRight;
-        if(p->left)
-            q.push(p->left);
-        if(p->right)
-            q.push(p->right);
 
+        if (myLeft)
+            q.push(myLeft);
+        if (myRight)
+            q.push(myRight);
     }
     return root;
-    
 }
 
-int count_leaf_nodes(Node* root) {
-    if (root == NULL)
-        return 0;
-    if (root->left == NULL && root->right == NULL)
-        return 1;
-    int l = count_leaf_nodes(root->left);
-    int r = count_leaf_nodes(root->right);
-    return l + r;
+bool isLeaf(Node* node) {
+    return node && node->left == NULL && node->right == NULL;
 }
-
-void print_left_boundary(Node* root) {
-    Node* f = root->left;
-    while (f) {
-        if (!(f->left == NULL && f->right == NULL))
-            cout << f->val << " ";
-        if (f->left)
-            f = f->left;
-        else
-            f = f->right;
-    }
-}
-
-void print_leaves(Node* root) {
+void traverse_left(Node* root, vector<int>& nodes) {
     if (!root) return;
-    if (root->left == NULL && root->right == NULL) {
-        cout << root->val << " ";
+
+    if (isLeaf(root)) {
+        nodes.push_back(root->val);
         return;
     }
-    print_leaves(root->left);
-    print_leaves(root->right);
+
+    if (root->left) {
+        traverse_left(root->left, nodes);
+        nodes.push_back(root->val);
+    } else if (root->right) {
+        traverse_left(root->right, nodes);
+        nodes.push_back(root->val);
+    } else {
+        nodes.push_back(root->val);
+    }
 }
 
-void print_right_boundary(Node* root) {
-    Node* f = root->right;
-    vector<int> temp;
-    while (f) {
-        if (!(f->left == NULL && f->right == NULL))
-            temp.push_back(f->val);
-        if (f->right)
-            f = f->right;
-        else
-            f = f->left;
+void traverse_right(Node* root, vector<int>& nodes) {
+    if (!root) return;
+
+    if (isLeaf(root)) {
+        nodes.push_back(root->val);
+        return;
     }
-    reverse(temp.begin(), temp.end());
-    for (int val : temp) {
-        cout << val << " ";
+
+    nodes.push_back(root->val);
+    if (root->right) {
+        traverse_right(root->right, nodes);
+    } else if (root->left) {
+        traverse_right(root->left, nodes);
     }
 }
 
 int main() {
     Node* root = input_tree();
     if (!root) return 0;
-    if (!(root->left == NULL && root->right == NULL))
-        cout << root->val << " ";
 
-    print_left_boundary(root);
-    print_leaves(root);
-    print_right_boundary(root);
+    vector<int> traverses_left;
+    vector<int> traverses_right;
+    traverse_left(root->left, traverses_left);
 
-    cout << endl;
+    traverse_right(root->right, traverses_right);
+
+    for (int val : traverses_left)
+        cout << val << " ";
+
+    cout << root->val << " ";
+
+    for (int val : traverses_right)
+        cout << val << " ";
+
     return 0;
 }
