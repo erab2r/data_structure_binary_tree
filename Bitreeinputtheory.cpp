@@ -1,6 +1,4 @@
-#include<bits/stdc++.h>
-using namespace std;
-
+C
 class Node
 {
     public:
