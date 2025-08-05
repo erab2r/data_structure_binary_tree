@@ -26,11 +26,10 @@ Node* input_tree()
     if(root) q.push(root);
     while(!q.empty())
     {
-        // 1. ber kore ana
+      
         Node* p = q.front();
         q.pop();
 
-        // 2. oi node ke niye kaj
         int l,r;
         cin >> l >> r;
         Node* myLeft, *myRight;
@@ -42,7 +41,6 @@ Node* input_tree()
         p->left = myLeft;
         p->right = myRight;
 
-        // 3. children push kora
         if(p->left)
             q.push(p->left);
         if(p->right)
